@@ -14,6 +14,7 @@ To use this plugin:
 - On the popup window that appears select the `+` button to add a new filter
 - Select the filter called `Ashmanix Blur Filter`
 - Use the slider labelled `Blur Size` to set the level of blur.
+- Use the dropdown to select between blur filter types.
 
 ## Build Instructions
 To build this code use the included scripts that are taken from the [OBS Plugin Template](https://github.com/obsproject/obs-plugintemplate).
