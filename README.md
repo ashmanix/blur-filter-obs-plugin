@@ -32,4 +32,3 @@ Each build produces installers and packages that you can use for testing and rel
 
 #### Building a Release
 Simply create and push a tag and GitHub Actions will run the pipeline in Release Mode. This mode uses the tag as its version number instead of the git ref in normal mode.
-# blur-filter-obs-plugin
