@@ -131,6 +131,6 @@ float4 PShader(VertData v_in) : TARGET
 technique Draw {
     pass {
         vertex_shader = VSDefault(v_in);
-        pixel_shader  = PShader(v_in);
+        pixel_shader  = PShaderBoth(v_in);
     }
 }
