@@ -1,5 +1,10 @@
 # OBS Blur Filter
 
+<p align="center">
+<image height="400px" src="/images/BlurFilterScreenshot.png">
+</p>
+
+
 ## Introduction
 This plugin is designed to allow you to set a simple blur filter on an image or video source in OBS.
 
