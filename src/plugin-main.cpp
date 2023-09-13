@@ -16,16 +16,16 @@ You should have received a copy of the GNU General Public License along
 with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
-#include "blur-filter.hpp"
-#include "plugin-macros.generated.h"
+#include "blur-filter-widget.hpp"
+#include "plugin-support.h"
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
 bool obs_module_load(void)
 {
-	auto blurFilter = new BlurFilter();
-	blurFilter->RegisterSource();
+	auto blurFilterWidget = new BlurFilterWidget();
+	blurFilterWidget->RegisterSource();
 	blog(LOG_INFO, "plugin loaded successfully (version %s)",
 	     PLUGIN_VERSION);
 	return true;
