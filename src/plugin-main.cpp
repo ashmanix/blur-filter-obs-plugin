@@ -17,7 +17,9 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
 #include "blur-filter-widget.hpp"
-#include "plugin-support.h"
+
+#include <obs-module.h>
+#include <plugin-support.h>
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
@@ -26,12 +28,12 @@ bool obs_module_load(void)
 {
 	auto blurFilterWidget = new BlurFilterWidget();
 	blurFilterWidget->RegisterSource();
-	blog(LOG_INFO, "plugin loaded successfully (version %s)",
+	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
 	     PLUGIN_VERSION);
 	return true;
 }
 
 void obs_module_unload()
 {
-	blog(LOG_INFO, "plugin unloaded");
+	obs_log(LOG_INFO, "plugin unloaded");
 }

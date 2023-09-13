@@ -27,7 +27,7 @@ const char *BlurFilterWidget::BlurFilterWidgetGetName(void *unused)
 void BlurFilterWidget::ChangeFilterSelection(struct gaussian_blur_data *filter)
 {
 	char *effect_path = obs_module_file(filter->selectedFileName);
-	// blog(LOG_INFO, "Path is: %s", effect_path);
+	// obs_log(LOG_INFO, "Path is: %s", effect_path);
 	obs_enter_graphics();
 	if (filter->effect) {
 		gs_effect_destroy(filter->effect);
@@ -36,7 +36,7 @@ void BlurFilterWidget::ChangeFilterSelection(struct gaussian_blur_data *filter)
 	obs_leave_graphics();
 
 	if (!filter->effect) {
-		blog(LOG_ERROR, "Could not load blur effect file '%s'",
+		obs_log(LOG_ERROR, "Could not load blur effect file '%s'",
 		     effect_path);
 	}
 
@@ -57,7 +57,7 @@ void *BlurFilterWidget::BlurFilterWidgetCreate(obs_data_t *settings,
 	struct gaussian_blur_data *filter =
 		(struct gaussian_blur_data *)bzalloc(
 			sizeof(struct gaussian_blur_data));
-	// blog(LOG_INFO, "Creating Filter");
+	// obs_log(LOG_INFO, "Creating Filter");
 
 	filter->context = source;
 	filter->selectedFileName = bstrdup("box_blur.effect");
@@ -80,7 +80,7 @@ void BlurFilterWidget::BlurFilterWidgetDestroy(void *data)
 
 void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
 {
-	// blog(LOG_INFO, "Updating Filter");
+	// obs_log(LOG_INFO, "Updating Filter");
 	struct gaussian_blur_data *filter = (struct gaussian_blur_data *)data;
 	double blurSize = obs_data_get_double(settings, SETTING_BLUR_SIZE);
 	filter->blurSize = (float)blurSize;
@@ -100,7 +100,7 @@ void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
 		break;
 	}
 	if (strcmp(effect_file, filter->selectedFileName) != 0) {
-		blog(LOG_INFO, "Changing effect file to: %s", effect_file);
+		obs_log(LOG_INFO, "Changing effect file to: %s", effect_file);
 		filter->selectedFileName = bstrdup(effect_file);
 		ChangeFilterSelection(filter);
 	}

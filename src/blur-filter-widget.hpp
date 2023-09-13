@@ -2,6 +2,7 @@
 #define BLURFILTERWIDGET_H
 
 #include <obs-module.h>
+#include <plugin-support.h>
 // #include <util/platform.h>
 // #include <graphics/image-file.h>
 // #include <graphics/graphics.h>
