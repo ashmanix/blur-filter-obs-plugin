@@ -2,12 +2,12 @@
 #define BLURFILTERWIDGET_H
 
 #include <obs-module.h>
-#include <util/platform.h>
-#include <graphics/image-file.h>
-#include <graphics/graphics.h>
-#include <graphics/matrix4.h>
-#include <graphics/vec2.h>
-#include <graphics/vec4.h>
+// #include <util/platform.h>
+// #include <graphics/image-file.h>
+// #include <graphics/graphics.h>
+// #include <graphics/matrix4.h>
+// #include <graphics/vec2.h>
+// #include <graphics/vec4.h>
 #include <string>
 
 #define SETTING_BLUR_SIZE "blur_size"
