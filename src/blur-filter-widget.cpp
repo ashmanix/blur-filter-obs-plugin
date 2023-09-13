@@ -60,7 +60,7 @@ void *BlurFilterWidget::BlurFilterWidgetCreate(obs_data_t *settings,
 	// blog(LOG_INFO, "Creating Filter");
 
 	filter->context = source;
-	filter->selectedFileName = bstrdup("box_blur.hlsl");
+	filter->selectedFileName = bstrdup("box_blur.effect");
 	ChangeFilterSelection(filter); // Default to box blur
 	obs_source_update(source, settings);
 
@@ -89,14 +89,14 @@ void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
 	char *effect_file = new char[30];
 	switch (blurType) {
 	case box:
-		strcpy(effect_file, "box_blur.hlsl");
+		strcpy(effect_file, "box_blur.effect");
 		break;
 	case gaussian:
-		strcpy(effect_file, "gaussian_blur.hlsl");
+		strcpy(effect_file, "gaussian_blur.effect");
 		break;
 
 	default:
-		strcpy(effect_file, "box_blur.hlsl");
+		strcpy(effect_file, "box_blur.effect");
 		break;
 	}
 	if (strcmp(effect_file, filter->selectedFileName) != 0) {

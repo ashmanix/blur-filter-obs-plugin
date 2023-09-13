@@ -1,5 +1,5 @@
 uniform float4x4 ViewProj;
-uniform Texture2D image;
+uniform texture2d image;
 uniform float targetWidth;
 uniform float targetHeight;
 uniform float blurSize;
