@@ -1,30 +1,30 @@
-#include "blur-filter.hpp"
+#include "blur-filter-widget.hpp"
 
-BlurFilter::~BlurFilter() {}
+BlurFilterWidget::~BlurFilterWidget() {}
 
-void BlurFilter::RegisterSource()
+void BlurFilterWidget::RegisterSource()
 {
 	source_info.id = "ashmanix_plugin_blur_filter";
 	source_info.type = OBS_SOURCE_TYPE_FILTER;
 	source_info.output_flags = OBS_SOURCE_VIDEO;
-	source_info.get_name = BlurFilterGetName;
-	source_info.create = BlurFilterCreate;
-	source_info.destroy = BlurFilterDestroy;
-	source_info.video_render = BlurFilterRender;
-	source_info.update = BlurFilterUpdate;
-	source_info.get_properties = BlurFilterProperties;
-	source_info.get_defaults = BlurFilterDefaults;
+	source_info.get_name = BlurFilterWidgetGetName;
+	source_info.create = BlurFilterWidgetCreate;
+	source_info.destroy = BlurFilterWidgetDestroy;
+	source_info.video_render = BlurFilterWidgetRender;
+	source_info.update = BlurFilterWidgetUpdate;
+	source_info.get_properties = BlurFilterWidgetProperties;
+	source_info.get_defaults = BlurFilterWidgetDefaults;
 
 	obs_register_source(&source_info);
 }
 
-const char *BlurFilter::BlurFilterGetName(void *unused)
+const char *BlurFilterWidget::BlurFilterWidgetGetName(void *unused)
 {
 	UNUSED_PARAMETER(unused);
 	return obs_module_text("BlurFilter");
 }
 
-void BlurFilter::ChangeFilterSelection(struct gaussian_blur_data *filter)
+void BlurFilterWidget::ChangeFilterSelection(struct gaussian_blur_data *filter)
 {
 	char *effect_path = obs_module_file(filter->selectedFileName);
 	// blog(LOG_INFO, "Path is: %s", effect_path);
@@ -50,7 +50,8 @@ void BlurFilter::ChangeFilterSelection(struct gaussian_blur_data *filter)
 	bfree(effect_path);
 }
 
-void *BlurFilter::BlurFilterCreate(obs_data_t *settings, obs_source_t *source)
+void *BlurFilterWidget::BlurFilterWidgetCreate(obs_data_t *settings,
+					       obs_source_t *source)
 {
 	UNUSED_PARAMETER(settings);
 	struct gaussian_blur_data *filter =
@@ -66,7 +67,7 @@ void *BlurFilter::BlurFilterCreate(obs_data_t *settings, obs_source_t *source)
 	return filter;
 }
 
-void BlurFilter::BlurFilterDestroy(void *data)
+void BlurFilterWidget::BlurFilterWidgetDestroy(void *data)
 {
 	struct gaussian_blur_data *filter = (struct gaussian_blur_data *)data;
 	if (filter->effect) {
@@ -77,7 +78,7 @@ void BlurFilter::BlurFilterDestroy(void *data)
 	bfree(data);
 }
 
-void BlurFilter::BlurFilterUpdate(void *data, obs_data_t *settings)
+void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
 {
 	// blog(LOG_INFO, "Updating Filter");
 	struct gaussian_blur_data *filter = (struct gaussian_blur_data *)data;
@@ -106,7 +107,7 @@ void BlurFilter::BlurFilterUpdate(void *data, obs_data_t *settings)
 	delete[] effect_file;
 }
 
-obs_properties_t *BlurFilter::BlurFilterProperties(void *data)
+obs_properties_t *BlurFilterWidget::BlurFilterWidgetProperties(void *data)
 {
 	obs_properties_t *properties = obs_properties_create();
 	obs_property_t *dropdown_property = obs_properties_add_list(
@@ -127,13 +128,13 @@ obs_properties_t *BlurFilter::BlurFilterProperties(void *data)
 	return properties;
 }
 
-void BlurFilter::BlurFilterDefaults(obs_data_t *settings)
+void BlurFilterWidget::BlurFilterWidgetDefaults(obs_data_t *settings)
 {
 	obs_data_set_default_double(settings, SETTING_BLUR_SIZE, 0.1);
 	obs_data_set_default_int(settings, SETTING_BLUR_TYPE, 0);
 }
 
-void BlurFilter::BlurFilterRender(void *data, gs_effect_t *effect)
+void BlurFilterWidget::BlurFilterWidgetRender(void *data, gs_effect_t *effect)
 {
 	struct gaussian_blur_data *filter = (struct gaussian_blur_data *)data;
 
@@ -177,4 +178,4 @@ void BlurFilter::BlurFilterRender(void *data, gs_effect_t *effect)
 	// }
 }
 
-BlurFilter::BlurFilter() {}
+BlurFilterWidget::BlurFilterWidget() {}
