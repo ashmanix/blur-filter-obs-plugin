@@ -40,10 +40,10 @@ invoke_formatter() {
           exit 2
         fi
 
-        if ! is-at-least ${formatter_version[-1]} 13.0.1; then
-          log_error "clang-format is more recent than version 13.0.1 (found ${formatter_version[-1]})."
-          exit 2
-        fi
+        # if ! is-at-least ${formatter_version[-1]} 13.0.1; then
+        #   log_error "clang-format is more recent than version 13.0.1 (found ${formatter_version[-1]})."
+        #   exit 2
+        # fi
       } else {
         log_error "No viable clang-format version found (required 13.0.1)"
         exit 2
