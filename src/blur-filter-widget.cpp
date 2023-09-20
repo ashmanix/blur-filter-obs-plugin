@@ -24,28 +24,28 @@ const char *BlurFilterWidget::BlurFilterWidgetGetName(void *unused)
 	return obs_module_text("BlurFilter");
 }
 
-void BlurFilterWidget::ChangeFilterSelection(struct gaussian_blur_data *filter)
+void BlurFilterWidget::ChangeFilterSelection(struct filter_data *filterData)
 {
-	char *effect_path = obs_module_file(filter->selectedFileName);
+	char *effect_path = obs_module_file(filterData->selectedFileName);
 	// obs_log(LOG_INFO, "Path is: %s", effect_path);
 	obs_enter_graphics();
-	if (filter->effect) {
-		gs_effect_destroy(filter->effect);
+	if (filterData->effect) {
+		gs_effect_destroy(filterData->effect);
 	}
-	filter->effect = gs_effect_create_from_file(effect_path, NULL);
+	filterData->effect = gs_effect_create_from_file(effect_path, NULL);
 	obs_leave_graphics();
 
-	if (!filter->effect) {
+	if (!filterData->effect) {
 		obs_log(LOG_ERROR, "Could not load blur effect file '%s'",
-		     effect_path);
+			effect_path);
 	}
 
-	filter->blurSizeParam =
-		gs_effect_get_param_by_name(filter->effect, "blurSize");
-	filter->targetWidthParam =
-		gs_effect_get_param_by_name(filter->effect, "targetWidth");
-	filter->targetHeightParam =
-		gs_effect_get_param_by_name(filter->effect, "targetHeight");
+	filterData->blurSizeParam =
+		gs_effect_get_param_by_name(filterData->effect, "blurSize");
+	filterData->targetWidthParam =
+		gs_effect_get_param_by_name(filterData->effect, "targetWidth");
+	filterData->targetHeightParam =
+		gs_effect_get_param_by_name(filterData->effect, "targetHeight");
 
 	bfree(effect_path);
 }
@@ -53,23 +53,28 @@ void BlurFilterWidget::ChangeFilterSelection(struct gaussian_blur_data *filter)
 void *BlurFilterWidget::BlurFilterWidgetCreate(obs_data_t *settings,
 					       obs_source_t *source)
 {
-	UNUSED_PARAMETER(settings);
-	struct gaussian_blur_data *filter =
-		(struct gaussian_blur_data *)bzalloc(
-			sizeof(struct gaussian_blur_data));
-	// obs_log(LOG_INFO, "Creating Filter");
+	// UNUSED_PARAMETER(settings);
+	struct filter_data *filterData =
+		(struct filter_data *)bzalloc(sizeof(struct filter_data));
 
-	filter->context = source;
-	filter->selectedFileName = bstrdup("box_blur.effect");
-	ChangeFilterSelection(filter); // Default to box blur
+
+	filterData->filterArray.push_back(
+		std::unique_ptr<BaseFilter>(new SimpleGaussianFilter()));
+	filterData->filterArray.push_back(
+		std::unique_ptr<BaseFilter>(new SimpleGaussianFilter()));
+
+	filterData->context = source;
+
+	filterData->selectedFileName = bstrdup("box_blur.effect");
+	ChangeFilterSelection(filterData); // Default to box blur
 	obs_source_update(source, settings);
 
-	return filter;
+	return filterData;
 }
 
 void BlurFilterWidget::BlurFilterWidgetDestroy(void *data)
 {
-	struct gaussian_blur_data *filter = (struct gaussian_blur_data *)data;
+	struct filter_data *filter = (struct filter_data *)data;
 	if (filter->effect) {
 		obs_enter_graphics();
 		gs_effect_destroy(filter->effect);
@@ -81,7 +86,7 @@ void BlurFilterWidget::BlurFilterWidgetDestroy(void *data)
 void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
 {
 	// obs_log(LOG_INFO, "Updating Filter");
-	struct gaussian_blur_data *filter = (struct gaussian_blur_data *)data;
+	struct filter_data *filter = (struct filter_data *)data;
 	double blurSize = obs_data_get_double(settings, SETTING_BLUR_SIZE);
 	filter->blurSize = (float)blurSize;
 	long long blurType = obs_data_get_int(settings, SETTING_BLUR_TYPE);
@@ -91,8 +96,8 @@ void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
 	case box:
 		strcpy(effect_file, "box_blur.effect");
 		break;
-	case gaussian:
-		strcpy(effect_file, "gaussian_blur.effect");
+	case simple_gaussian:
+		strcpy(effect_file, "simple_gaussian_blur.effect");
 		break;
 
 	default:
@@ -110,19 +115,20 @@ void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
 obs_properties_t *BlurFilterWidget::BlurFilterWidgetProperties(void *data)
 {
 	obs_properties_t *properties = obs_properties_create();
-	obs_property_t *dropdown_property = obs_properties_add_list(
-		properties, SETTING_BLUR_TYPE,
-		obs_module_text("BurTypeDropdownSelectTitle"),
-		OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_INT);
 	obs_properties_add_float_slider(properties, SETTING_BLUR_SIZE,
 					obs_module_text("BlurSizeSelectTitle"),
 					0, 10.0, 0.1);
+
+	obs_property_t *dropdown_property = obs_properties_add_list(
+		properties, SETTING_BLUR_TYPE,
+		obs_module_text("BlurTypeDropdownSelectTitle"),
+		OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_INT);
 	obs_property_list_add_int(dropdown_property,
 				  obs_module_text("BlurTypeSelectOptionBox"),
 				  box);
 	obs_property_list_add_int(
 		dropdown_property,
-		obs_module_text("BlurTypeSelectOptionGaussian"), gaussian);
+		obs_module_text("BlurTypeSelectOptionSimpleGaussian"), simple_gaussian);
 
 	UNUSED_PARAMETER(data);
 	return properties;
@@ -136,7 +142,7 @@ void BlurFilterWidget::BlurFilterWidgetDefaults(obs_data_t *settings)
 
 void BlurFilterWidget::BlurFilterWidgetRender(void *data, gs_effect_t *effect)
 {
-	struct gaussian_blur_data *filter = (struct gaussian_blur_data *)data;
+	struct filter_data *filter = (struct filter_data *)data;
 
 	if (!obs_source_process_filter_begin(filter->context, GS_RGBA,
 					     OBS_ALLOW_DIRECT_RENDERING))
@@ -156,26 +162,15 @@ void BlurFilterWidget::BlurFilterWidgetRender(void *data, gs_effect_t *effect)
 		obs_source_process_filter_end(filter->context, filter->effect,
 					      0, 0);
 	}
-
-	// Second pass
-	// if (!obs_source_process_filter_begin(filter->context, GS_RGBA,
-	// 				     OBS_ALLOW_DIRECT_RENDERING))
-	// 	return;
-
-	// gs_effect_set_float(filter->blurSizeParam,
-	// 		    (filter->blurSize == 0.0 ? 0.01
-	// 					     : filter->blurSize));
-	// gs_effect_set_float(filter->targetWidthParam,
-	// 		    (float)obs_source_get_width(filter->context));
-	// gs_effect_set_float(filter->targetHeightParam,
-	// 		    (float)obs_source_get_height(filter->context));
-
-	// if (!filter->effect) {
-	// 	obs_source_process_filter_end(filter->context, effect, 0, 0);
-	// } else {
-	// 	obs_source_process_filter_end(filter->context, filter->effect,
-	// 				      0, 0);
-	// }
 }
 
-BlurFilterWidget::BlurFilterWidget() {}
+BlurFilterWidget::BlurFilterWidget()
+{
+	// filterArray[0] = new SimpleGaussianFilter;
+	// filterArray[1] = new SimpleGaussianFilter;
+
+	// filterArray.push_back(
+	// 	std::unique_ptr<BaseFilter>(new SimpleGaussianFilter()));
+	// filterArray.push_back(
+	// 	std::unique_ptr<BaseFilter>(new SimpleGaussianFilter()));
+}

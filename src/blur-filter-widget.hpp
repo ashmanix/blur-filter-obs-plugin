@@ -3,20 +3,17 @@
 
 #include <obs-module.h>
 #include <plugin-support.h>
-// #include <util/platform.h>
-// #include <graphics/image-file.h>
-// #include <graphics/graphics.h>
-// #include <graphics/matrix4.h>
-// #include <graphics/vec2.h>
-// #include <graphics/vec4.h>
 #include <string>
+#include <vector>
+#include "src/filters/base-filter.hpp"
+#include "src/filters/simple-gaussian.hpp"
 
 #define SETTING_BLUR_SIZE "blur_size"
 #define SETTING_BLUR_TYPE "blur_type"
 
 class BlurFilterWidget {
 private:
-	struct gaussian_blur_data {
+	struct filter_data {
 		obs_source_t *context;
 		gs_effect_t *effect;
 
@@ -26,10 +23,15 @@ private:
 
 		float blurSize;
 		char *selectedFileName;
-		std::string selected_file = "";
+		// std::string selected_file = "";
+		int selectedFilterIndex = 0;
+		std::vector<std::unique_ptr<BaseFilter>> filterArray; 
 	};
 
-	enum BlurType { box, gaussian };
+	// BaseFilter** filterArray = new BaseFilter*[2];
+	
+
+	enum BlurType { box, simple_gaussian };
 	obs_source_info source_info = {};
 
 	static const char *BlurFilterWidgetGetName(void *unused);
@@ -40,7 +42,7 @@ private:
 	static obs_properties_t *BlurFilterWidgetProperties(void *data);
 	static void BlurFilterWidgetDefaults(obs_data_t *settings);
 	static void BlurFilterWidgetRender(void *data, gs_effect_t *effect);
-	static void ChangeFilterSelection(struct gaussian_blur_data *filter);
+	static void ChangeFilterSelection(struct filter_data *filter);
 
 public:
 	BlurFilterWidget();
