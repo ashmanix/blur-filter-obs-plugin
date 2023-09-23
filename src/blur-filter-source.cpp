@@ -82,7 +82,6 @@ void BlurFilterSource::DestroySource(void *data)
 
 void BlurFilterSource::UpdateSource(void *data, obs_data_t *settings)
 {
-	// obs_log(LOG_INFO, "Updating Source");
 	struct filter_data *filterData = (struct filter_data *)data;
 	long long filterIndex = filterData->selectedFilterIndex;
 	filterData->filterArray[filterIndex]->UpdateFilter(settings);
