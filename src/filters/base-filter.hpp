@@ -11,7 +11,7 @@ private:
 	obs_property_t *filterPropertiesGroup;
 
 public:
-	virtual void SetFilterParameters(gs_effect_t *effect)
+	virtual void SetParameters(gs_effect_t *effect)
 	{
 		UNUSED_PARAMETER(effect);
 	}

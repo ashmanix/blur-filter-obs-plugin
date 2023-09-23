@@ -8,6 +8,7 @@
 #include "src/filters/base-filter.hpp"
 #include "src/filters/simple-gaussian.hpp"
 #include "src/filters/box-blur-filter.hpp"
+#include "src/filters/fast-gaussian.hpp"
 
 #define SETTING_BLUR_SIZE "blur_size"
 #define SETTING_BLUR_TYPE "blur_type"
@@ -19,7 +20,7 @@ private:
 		gs_effect_t *effect;
 
 		char *selectedFileName;
-		long long selectedFilterIndex = 0;
+		long long selectedFilterIndex;
 		std::vector<std::unique_ptr<BaseFilter>> filterArray;
 
 		obs_properties_t *mainProperties;
@@ -38,7 +39,7 @@ private:
 	static obs_properties_t *GetProperties(void *data);
 	static void SetDefaultProperties(filter_data *filterData, obs_data_t *settings);
 	static void RenderSource(void *data, gs_effect_t *effect);
-	static void ChangeFilterSelection(struct filter_data *filter);
+	static void ChangeFilterSelection(struct filter_data *filter, obs_data_t *settings);
 	static bool FilterSelectionChangeCallback(void *data, obs_properties_t *props,
 		obs_property_t *list, obs_data_t *settings);
 	static void TogglePropertyGroupVisibility(filter_data *data);

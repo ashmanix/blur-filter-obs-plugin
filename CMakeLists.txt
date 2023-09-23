@@ -34,6 +34,6 @@ if(ENABLE_QT)
                AUTORCC ON)
 endif()
 
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-main.cpp src/blur-filter-source.cpp src/filters/base-filter.hpp src/filters/simple-gaussian.cpp src/filters/box-blur-filter.cpp)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-main.cpp src/blur-filter-source.cpp src/filters/base-filter.hpp src/filters/simple-gaussian.cpp src/filters/box-blur-filter.cpp src/filters/fast-gaussian.cpp)
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})

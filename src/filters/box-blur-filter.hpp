@@ -7,12 +7,9 @@
 #include <string>
 
 #define SETTING_BOX_FILTER_SIZE "box_filter_blur_size"
-#define SETTING_BOX_FILTER_TYPE "box_filter_blur_type"
 
 class BoxBlurFilter : public BaseFilter {
 private:
-	gs_effect_t *effect;
-
 	gs_eparam_t *blurSizeParam;
 	gs_eparam_t *targetWidthParam;
 	gs_eparam_t *targetHeightParam;
@@ -27,7 +24,7 @@ private:
 public:
 	BoxBlurFilter();
 	~BoxBlurFilter();
-	void SetFilterParameters(gs_effect_t *effect);
+	void SetParameters(gs_effect_t *effect);
 	void UpdateFilter(obs_data_t *settings);
 	void SetProperties(obs_properties_t *mainProperties, std::string name);
 	void SetPropertyDefaults(obs_data_t *settings);

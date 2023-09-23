@@ -24,7 +24,8 @@ const char *BlurFilterSource::GetName(void *unused)
 	return obs_module_text("BlurFilter");
 }
 
-void BlurFilterSource::ChangeFilterSelection(struct filter_data *filterData)
+void BlurFilterSource::ChangeFilterSelection(struct filter_data *filterData,
+					     obs_data_t *settings)
 {
 	long long filterIndex = filterData->selectedFilterIndex;
 
@@ -44,8 +45,8 @@ void BlurFilterSource::ChangeFilterSelection(struct filter_data *filterData)
 			effectPath);
 	}
 
-	filterData->filterArray[filterIndex]->SetFilterParameters(
-		filterData->effect);
+	filterData->filterArray[filterIndex]->SetParameters(filterData->effect);
+	filterData->filterArray[filterIndex]->UpdateFilter(settings);
 	TogglePropertyGroupVisibility(filterData);
 }
 
@@ -58,12 +59,13 @@ void *BlurFilterSource::CreateSource(obs_data_t *settings, obs_source_t *source)
 		std::unique_ptr<BaseFilter>(new SimpleGaussianFilter()));
 	filterData->filterArray.push_back(
 		std::unique_ptr<BaseFilter>(new BoxBlurFilter()));
-
-	SetDefaultProperties(filterData, settings);
+	filterData->filterArray.push_back(
+		std::unique_ptr<BaseFilter>(new FastGaussianFilter()));
 
 	filterData->context = source;
 
-	ChangeFilterSelection(filterData);
+	SetDefaultProperties(filterData, settings);
+
 	obs_source_update(source, settings);
 
 	return filterData;
@@ -83,8 +85,12 @@ void BlurFilterSource::DestroySource(void *data)
 void BlurFilterSource::UpdateSource(void *data, obs_data_t *settings)
 {
 	struct filter_data *filterData = (struct filter_data *)data;
-	long long filterIndex = filterData->selectedFilterIndex;
-	filterData->filterArray[filterIndex]->UpdateFilter(settings);
+	long long blurTypeIndex = obs_data_get_int(settings, SETTING_BLUR_TYPE);
+	if (filterData && (filterData->selectedFilterIndex != blurTypeIndex)) {
+		filterData->selectedFilterIndex = blurTypeIndex;
+		ChangeFilterSelection(filterData, settings);
+		filterData->filterArray[blurTypeIndex]->UpdateFilter(settings);
+	}
 }
 
 bool BlurFilterSource::FilterSelectionChangeCallback(void *data,
@@ -101,7 +107,7 @@ bool BlurFilterSource::FilterSelectionChangeCallback(void *data,
 	if (selectedFilterIndex != filterData->selectedFilterIndex) {
 		filterData->selectedFilterIndex = selectedFilterIndex;
 
-		ChangeFilterSelection(filterData);
+		ChangeFilterSelection(filterData, settings);
 
 		obs_log(LOG_INFO, "Filter Changed To: %s",
 			obs_property_list_item_name(list, selectedFilterIndex));
@@ -149,7 +155,8 @@ obs_properties_t *BlurFilterSource::GetProperties(void *data)
 	return nullptr;
 }
 
-void BlurFilterSource::SetDefaultProperties(filter_data *filterData, obs_data_t *settings)
+void BlurFilterSource::SetDefaultProperties(filter_data *filterData,
+					    obs_data_t *settings)
 {
 	for (size_t i = 0; i < filterData->filterArray.size(); i++) {
 		filterData->filterArray[i]->SetPropertyDefaults(settings);
