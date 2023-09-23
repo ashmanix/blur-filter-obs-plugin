@@ -15,11 +15,6 @@ public:
 	{
 		UNUSED_PARAMETER(effect);
 	}
-	virtual void ConfigureFilter(obs_data_t *settings, obs_source_t *source)
-	{
-		UNUSED_PARAMETER(settings);
-		UNUSED_PARAMETER(source);
-	}
 	virtual void SetProperties(obs_properties_t *mainProperties,
 				   std::string name)
 	{
@@ -30,7 +25,10 @@ public:
 	{
 		UNUSED_PARAMETER(settings);
 	}
-	virtual void SetPropertyDefaults() {}
+	virtual void SetPropertyDefaults(obs_data_t *settings)
+	{
+		UNUSED_PARAMETER(settings);
+	}
 	virtual void Render(obs_source_t *context)
 	{
 		UNUSED_PARAMETER(context);

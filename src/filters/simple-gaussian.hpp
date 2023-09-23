@@ -28,7 +28,6 @@ public:
 	SimpleGaussianFilter();
 	~SimpleGaussianFilter();
 	void SetFilterParameters(gs_effect_t *effect);
-	void ConfigureFilter(obs_data_t *settings, obs_source_t *source);
 	void UpdateFilter(obs_data_t *settings);
 	void SetProperties(obs_properties_t *mainProperties, std::string name);
 	void SetPropertyDefaults(obs_data_t *settings);

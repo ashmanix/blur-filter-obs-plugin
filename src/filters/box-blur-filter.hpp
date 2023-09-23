@@ -1,15 +1,15 @@
-#ifndef TESTFILTER_H
-#define TESTFILTER_H
+#ifndef BOXBLURFILTER_H
+#define BOXBLURFILTER_H
 
 #include "base-filter.hpp"
 #include <plugin-support.h>
 #include <obs-module.h>
 #include <string>
 
-#define SETTING_TEST_FILTER_SIZE "test_filter_blur_size"
-#define SETTING_TEST_FILTER_TYPE "test_filter_blur_type"
+#define SETTING_BOX_FILTER_SIZE "box_filter_blur_size"
+#define SETTING_BOX_FILTER_TYPE "box_filter_blur_type"
 
-class TestFilter : public BaseFilter {
+class BoxBlurFilter : public BaseFilter {
 private:
 	gs_effect_t *effect;
 
@@ -21,14 +21,13 @@ private:
 	obs_properties_t *filterProperties;
 	obs_property_t *filterPropertiesGroup;
 
-	char const *shaderFileName = "test.effect";
-	char const *filterName = obs_module_text("Test");
+	char const *shaderFileName = "box_blur.effect";
+	char const *filterName = obs_module_text("BlurTypeSelectOptionBox");
 
 public:
-	TestFilter();
-	~TestFilter();
+	BoxBlurFilter();
+	~BoxBlurFilter();
 	void SetFilterParameters(gs_effect_t *effect);
-	void ConfigureFilter(obs_data_t *settings, obs_source_t *source);
 	void UpdateFilter(obs_data_t *settings);
 	void SetProperties(obs_properties_t *mainProperties, std::string name);
 	void SetPropertyDefaults(obs_data_t *settings);
@@ -39,4 +38,4 @@ public:
 	const char *GetFilterName();
 };
 
-#endif // TESTFILTER_H
+#endif // BOXBLURFILTER_H

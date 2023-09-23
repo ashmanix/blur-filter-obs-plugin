@@ -7,7 +7,7 @@
 #include <vector>
 #include "src/filters/base-filter.hpp"
 #include "src/filters/simple-gaussian.hpp"
-#include "src/filters/test-filter.hpp"
+#include "src/filters/box-blur-filter.hpp"
 
 #define SETTING_BLUR_SIZE "blur_size"
 #define SETTING_BLUR_TYPE "blur_type"
@@ -36,7 +36,7 @@ private:
 	static void DestroySource(void *data);
 	static void UpdateSource(void *data, obs_data_t *settings);
 	static obs_properties_t *GetProperties(void *data);
-	static void SetDefaultProperties(filter_data *filterData);
+	static void SetDefaultProperties(filter_data *filterData, obs_data_t *settings);
 	static void RenderSource(void *data, gs_effect_t *effect);
 	static void ChangeFilterSelection(struct filter_data *filter);
 	static bool FilterSelectionChangeCallback(void *data, obs_properties_t *props,

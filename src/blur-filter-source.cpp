@@ -57,9 +57,9 @@ void *BlurFilterSource::CreateSource(obs_data_t *settings, obs_source_t *source)
 	filterData->filterArray.push_back(
 		std::unique_ptr<BaseFilter>(new SimpleGaussianFilter()));
 	filterData->filterArray.push_back(
-		std::unique_ptr<BaseFilter>(new TestFilter()));
+		std::unique_ptr<BaseFilter>(new BoxBlurFilter()));
 
-	SetDefaultProperties(filterData);
+	SetDefaultProperties(filterData, settings);
 
 	filterData->context = source;
 
@@ -149,10 +149,10 @@ obs_properties_t *BlurFilterSource::GetProperties(void *data)
 	return nullptr;
 }
 
-void BlurFilterSource::SetDefaultProperties(filter_data *filterData)
+void BlurFilterSource::SetDefaultProperties(filter_data *filterData, obs_data_t *settings)
 {
 	for (size_t i = 0; i < filterData->filterArray.size(); i++) {
-		filterData->filterArray[i]->SetPropertyDefaults();
+		filterData->filterArray[i]->SetPropertyDefaults(settings);
 	}
 }
 
