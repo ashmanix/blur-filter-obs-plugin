@@ -82,3 +82,8 @@ const char *TestFilter::GetShaderFilePath()
 	const char *path = obs_module_file(shaderFileName);
 	return path;
 }
+
+const char *TestFilter::GetFilterName()
+{
+	return filterName;
+}

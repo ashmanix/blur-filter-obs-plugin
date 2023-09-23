@@ -82,3 +82,8 @@ const char *SimpleGaussianFilter::GetShaderFilePath()
 	const char *path = obs_module_file(shaderFileName);
 	return path;
 }
+
+const char *SimpleGaussianFilter::GetFilterName()
+{
+	return filterName;
+}

@@ -22,6 +22,7 @@ private:
 	obs_property_t *filterPropertiesGroup;
 
 	char const *shaderFileName = "test.effect";
+	char const *filterName = obs_module_text("Test");
 
 public:
 	TestFilter();
@@ -35,6 +36,7 @@ public:
 	void HidePropertiesGroup();
 	void ShowPropertiesGroup();
 	const char *GetShaderFilePath();
+	const char *GetFilterName();
 };
 
 #endif // TESTFILTER_H

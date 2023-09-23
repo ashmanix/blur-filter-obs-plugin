@@ -1,40 +1,37 @@
-#include "blur-filter-widget.hpp"
+#include "blur-filter-source.hpp"
 
-BlurFilterWidget::~BlurFilterWidget() {}
+BlurFilterSource::BlurFilterSource() {}
+BlurFilterSource::~BlurFilterSource() {}
 
-void BlurFilterWidget::RegisterSource()
+void BlurFilterSource::RegisterSource()
 {
 	source_info.id = "ashmanix_plugin_blur_filter";
 	source_info.type = OBS_SOURCE_TYPE_FILTER;
 	source_info.output_flags = OBS_SOURCE_VIDEO;
-	source_info.get_name = BlurFilterWidgetGetName;
-	source_info.create = BlurFilterWidgetCreate;
-	source_info.destroy = BlurFilterWidgetDestroy;
-	source_info.video_render = BlurFilterWidgetRender;
-	source_info.update = BlurFilterWidgetUpdate;
-	source_info.get_properties = BlurFilterWidgetProperties;
-	source_info.get_defaults2 = BlurFilterWidgetDefaults;
+	source_info.get_name = GetName;
+	source_info.create = CreateSource;
+	source_info.destroy = DestroySource;
+	source_info.video_render = RenderSource;
+	source_info.update = UpdateSource;
+	source_info.get_properties = GetProperties;
 
 	obs_register_source(&source_info);
 }
 
-const char *BlurFilterWidget::BlurFilterWidgetGetName(void *unused)
+const char *BlurFilterSource::GetName(void *unused)
 {
 	UNUSED_PARAMETER(unused);
 	return obs_module_text("BlurFilter");
 }
 
-void BlurFilterWidget::ChangeFilterSelection(struct filter_data *filterData)
+void BlurFilterSource::ChangeFilterSelection(struct filter_data *filterData)
 {
-	UNUSED_PARAMETER(filterData);
 	long long filterIndex = filterData->selectedFilterIndex;
-	obs_log(LOG_INFO, "Selected Filter Index: %ld", filterIndex);
 
 	obs_enter_graphics();
 
 	if (filterData->effect) {
 		gs_effect_destroy(filterData->effect);
-		obs_log(LOG_INFO, "Destroying filter effect!");
 	}
 	const char *effectPath =
 		filterData->filterArray[filterIndex]->GetShaderFilePath();
@@ -43,20 +40,17 @@ void BlurFilterWidget::ChangeFilterSelection(struct filter_data *filterData)
 	obs_leave_graphics();
 
 	if (!filterData->effect) {
-		blog(LOG_ERROR, "Could not load blur effect file '%s'",
-		     effectPath);
+		obs_log(LOG_ERROR, "Could not load effect file '%s'",
+			effectPath);
 	}
 
-	// gs_effect_t *effect = filterData->effect;
 	filterData->filterArray[filterIndex]->SetFilterParameters(
 		filterData->effect);
 	TogglePropertyGroupVisibility(filterData);
 }
 
-void *BlurFilterWidget::BlurFilterWidgetCreate(obs_data_t *settings,
-					       obs_source_t *source)
+void *BlurFilterSource::CreateSource(obs_data_t *settings, obs_source_t *source)
 {
-	// UNUSED_PARAMETER(settings);
 	struct filter_data *filterData =
 		(struct filter_data *)bzalloc(sizeof(struct filter_data));
 
@@ -65,16 +59,17 @@ void *BlurFilterWidget::BlurFilterWidgetCreate(obs_data_t *settings,
 	filterData->filterArray.push_back(
 		std::unique_ptr<BaseFilter>(new TestFilter()));
 
+	SetDefaultProperties(filterData);
+
 	filterData->context = source;
 
-	// filterData->selectedFileName = bstrdup("box_blur.effect");
-	ChangeFilterSelection(filterData); // Default to box blur
+	ChangeFilterSelection(filterData);
 	obs_source_update(source, settings);
 
 	return filterData;
 }
 
-void BlurFilterWidget::BlurFilterWidgetDestroy(void *data)
+void BlurFilterSource::DestroySource(void *data)
 {
 	struct filter_data *filterData = (struct filter_data *)data;
 	if (filterData->effect) {
@@ -85,32 +80,20 @@ void BlurFilterWidget::BlurFilterWidgetDestroy(void *data)
 	bfree(data);
 }
 
-void BlurFilterWidget::BlurFilterWidgetUpdate(void *data, obs_data_t *settings)
+void BlurFilterSource::UpdateSource(void *data, obs_data_t *settings)
 {
-	obs_log(LOG_INFO, "Updating Filter from update function");
-	UNUSED_PARAMETER(data);
-	UNUSED_PARAMETER(settings);
+	// obs_log(LOG_INFO, "Updating Source");
 	struct filter_data *filterData = (struct filter_data *)data;
 	long long filterIndex = filterData->selectedFilterIndex;
 	filterData->filterArray[filterIndex]->UpdateFilter(settings);
 }
 
-void BlurFilterWidget::UpdateFilterProperties(obs_properties_t *properties,
-					      long long selectedFilterIndex)
-{
-	UNUSED_PARAMETER(properties);
-	UNUSED_PARAMETER(selectedFilterIndex);
-}
-
-bool BlurFilterWidget::FilterSelectionChangeCallback(void *data,
+bool BlurFilterSource::FilterSelectionChangeCallback(void *data,
 						     obs_properties_t *props,
 						     obs_property_t *list,
 						     obs_data_t *settings)
 {
 	UNUSED_PARAMETER(props);
-	// UNUSED_PARAMETER(list);
-	// UNUSED_PARAMETER(settings);
-
 	long long selectedFilterIndex =
 		obs_data_get_int(settings, SETTING_BLUR_TYPE);
 
@@ -121,24 +104,17 @@ bool BlurFilterWidget::FilterSelectionChangeCallback(void *data,
 
 		ChangeFilterSelection(filterData);
 
-		obs_log(LOG_INFO, "Filter change!");
-		obs_log(LOG_INFO, "Property Changed To: %s",
+		obs_log(LOG_INFO, "Filter Changed To: %s",
 			obs_property_list_item_name(list, selectedFilterIndex));
-
-		// obs_log(LOG_INFO, "Selected Filter Index: %ld",
-		// 	selectedFilterIndex);
 	}
 
 	return true;
 }
 
-obs_properties_t *BlurFilterWidget::BlurFilterWidgetProperties(void *data)
+obs_properties_t *BlurFilterSource::GetProperties(void *data)
 {
-	// Register all filter properties to the properties object
-	// Each filter will have its own filter group which will be saved in its own class
-	// When a filter is chosen from the dropdown then we will hide all other groups and just show the selected filters options
 	struct filter_data *filterData = (struct filter_data *)data;
-	// UNUSED_PARAMETER(filterData);
+
 	if (filterData) {
 		filterData->mainProperties = obs_properties_create();
 
@@ -147,13 +123,14 @@ obs_properties_t *BlurFilterWidget::BlurFilterWidgetProperties(void *data)
 				filterData->mainProperties, SETTING_BLUR_TYPE,
 				obs_module_text("BlurTypeDropdownSelectTitle"),
 				OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_INT);
-		obs_property_list_add_int(
-			filterDropdownProperty,
-			obs_module_text("BlurTypeSelectOptionBox"), box);
-		obs_property_list_add_int(
-			filterDropdownProperty,
-			obs_module_text("BlurTypeSelectOptionSimpleGaussian"),
-			simple_gaussian);
+
+		for (size_t i = 0; i < filterData->filterArray.size(); i++) {
+
+			const char *name =
+				filterData->filterArray[i]->GetFilterName();
+			obs_property_list_add_int(filterDropdownProperty, name,
+						  i);
+		}
 
 		obs_property_set_modified_callback2(
 			filterDropdownProperty, FilterSelectionChangeCallback,
@@ -173,26 +150,35 @@ obs_properties_t *BlurFilterWidget::BlurFilterWidgetProperties(void *data)
 	return nullptr;
 }
 
-void BlurFilterWidget::BlurFilterWidgetDefaults(void *data,
-						obs_data_t *settings)
+void BlurFilterSource::SetDefaultProperties(filter_data *filterData)
 {
-	UNUSED_PARAMETER(settings);
-	UNUSED_PARAMETER(data);
+	for (size_t i = 0; i < filterData->filterArray.size(); i++) {
+		filterData->filterArray[i]->SetPropertyDefaults();
+	}
 }
 
-void BlurFilterWidget::BlurFilterWidgetRender(void *data, gs_effect_t *effect)
+void BlurFilterSource::RenderSource(void *data, gs_effect_t *effect)
 {
-	UNUSED_PARAMETER(data);
-	UNUSED_PARAMETER(effect);
 	struct filter_data *filterData = (struct filter_data *)data;
 	long long filterIndex = filterData->selectedFilterIndex;
 	obs_source_t *context = filterData->context;
+
+	if (!obs_source_process_filter_begin(filterData->context, GS_RGBA,
+					     OBS_ALLOW_DIRECT_RENDERING))
+		return;
+
 	filterData->filterArray[filterIndex]->Render(context);
+
+	if (!filterData->effect) {
+		obs_source_process_filter_end(filterData->context, effect, 0,
+					      0);
+	} else {
+		obs_source_process_filter_end(filterData->context,
+					      filterData->effect, 0, 0);
+	}
 }
 
-BlurFilterWidget::BlurFilterWidget() {}
-
-void BlurFilterWidget::TogglePropertyGroupVisibility(filter_data *data)
+void BlurFilterSource::TogglePropertyGroupVisibility(filter_data *data)
 {
 	for (size_t i = 0; i < data->filterArray.size(); i++) {
 		if (data->selectedFilterIndex >= 0 &&

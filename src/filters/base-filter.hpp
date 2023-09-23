@@ -38,6 +38,7 @@ public:
 	virtual void HidePropertiesGroup() {}
 	virtual void ShowPropertiesGroup() {}
 	virtual const char *GetShaderFilePath() { return nullptr; }
+	virtual const char *GetFilterName() { return nullptr; }
 };
 
 #endif // BASEFILTER_H
