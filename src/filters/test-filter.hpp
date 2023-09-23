@@ -1,15 +1,15 @@
-#ifndef SIMPLEGUASSIAN_H
-#define SIMPLEGUASSIAN_H
+#ifndef TESTFILTER_H
+#define TESTFILTER_H
 
 #include "base-filter.hpp"
 #include <plugin-support.h>
 #include <obs-module.h>
 #include <string>
 
-#define SETTING_SIMPLE_GAUSSIAN_SIZE "simple_gaussian_blur_size"
-#define SETTING_SIMPLE_GAUSSIAN_TYPE "simple_guassian_blur_type"
+#define SETTING_TEST_FILTER_SIZE "test_filter_blur_size"
+#define SETTING_TEST_FILTER_TYPE "test_filter_blur_type"
 
-class SimpleGaussianFilter : public BaseFilter {
+class TestFilter : public BaseFilter {
 private:
 	gs_effect_t *effect;
 
@@ -21,11 +21,11 @@ private:
 	obs_properties_t *filterProperties;
 	obs_property_t *filterPropertiesGroup;
 
-	char const *shaderFileName = "simple_gaussian_blur.effect";
+	char const *shaderFileName = "test.effect";
 
 public:
-	SimpleGaussianFilter();
-	~SimpleGaussianFilter();
+	TestFilter();
+	~TestFilter();
 	void SetFilterParameters(gs_effect_t *effect);
 	void ConfigureFilter(obs_data_t *settings, obs_source_t *source);
 	void UpdateFilter(obs_data_t *settings);
@@ -37,4 +37,4 @@ public:
 	const char *GetShaderFilePath();
 };
 
-#endif // SIMPLEGAUSSIAN_H
+#endif // TESTFILTER_H

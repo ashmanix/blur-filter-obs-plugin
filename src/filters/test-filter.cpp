@@ -1,22 +1,22 @@
-#include "simple-gaussian.hpp"
+#include "test-filter.hpp"
 
-SimpleGaussianFilter::SimpleGaussianFilter()
+TestFilter::TestFilter()
 {
 	char *effect_path = obs_module_file(shaderFileName);
 
 	bfree(effect_path);
 }
 
-SimpleGaussianFilter::~SimpleGaussianFilter() {}
+TestFilter::~TestFilter() {}
 
-void SimpleGaussianFilter::SetFilterParameters(gs_effect_t *effect)
+void TestFilter::SetFilterParameters(gs_effect_t *effect)
 {
 	blurSizeParam = gs_effect_get_param_by_name(effect, "blurSize");
 	targetWidthParam = gs_effect_get_param_by_name(effect, "targetWidth");
 	targetHeightParam = gs_effect_get_param_by_name(effect, "targetHeight");
 }
 
-void SimpleGaussianFilter::ConfigureFilter(obs_data_t *settings,
+void TestFilter::ConfigureFilter(obs_data_t *settings,
 					   obs_source_t *source)
 {
 	UNUSED_PARAMETER(settings);
@@ -24,20 +24,20 @@ void SimpleGaussianFilter::ConfigureFilter(obs_data_t *settings,
 	obs_log(LOG_INFO, "something");
 }
 
-void SimpleGaussianFilter::UpdateFilter(obs_data_t *settings)
+void TestFilter::UpdateFilter(obs_data_t *settings)
 {
 	double settingsBlurSize =
-		obs_data_get_double(settings, SETTING_SIMPLE_GAUSSIAN_SIZE);
+		obs_data_get_double(settings, SETTING_TEST_FILTER_SIZE);
 	blurSize = (float)settingsBlurSize;
 }
 
-void SimpleGaussianFilter::SetProperties(obs_properties_t *mainProperties,
+void TestFilter::SetProperties(obs_properties_t *mainProperties,
 					 std::string name)
 {
 	filterProperties = obs_properties_create();
 
 	obs_properties_add_float_slider(filterProperties,
-					SETTING_SIMPLE_GAUSSIAN_SIZE,
+					SETTING_TEST_FILTER_SIZE,
 					obs_module_text("BlurSizeSelectTitle"),
 					0, 10.0, 0.1);
 
@@ -50,14 +50,14 @@ void SimpleGaussianFilter::SetProperties(obs_properties_t *mainProperties,
 		filterProperties);
 }
 
-void SimpleGaussianFilter::SetPropertyDefaults(obs_data_t *settings)
+void TestFilter::SetPropertyDefaults(obs_data_t *settings)
 {
-	obs_data_set_default_double(settings, SETTING_SIMPLE_GAUSSIAN_SIZE,
+	obs_data_set_default_double(settings, SETTING_TEST_FILTER_SIZE,
 				    0.1);
-	obs_data_set_default_int(settings, SETTING_SIMPLE_GAUSSIAN_TYPE, 0);
+	obs_data_set_default_int(settings, SETTING_TEST_FILTER_TYPE, 0);
 }
 
-void SimpleGaussianFilter::Render(obs_source_t *context)
+void TestFilter::Render(obs_source_t *context)
 {
 	gs_effect_set_float(blurSizeParam,
 			    (blurSize == 0.0) ? 0.01f : blurSize);
@@ -67,17 +67,17 @@ void SimpleGaussianFilter::Render(obs_source_t *context)
 			    (float)obs_source_get_height(context));
 }
 
-void SimpleGaussianFilter::HidePropertiesGroup()
+void TestFilter::HidePropertiesGroup()
 {
 	obs_property_set_visible(filterPropertiesGroup, false);
 }
 
-void SimpleGaussianFilter::ShowPropertiesGroup()
+void TestFilter::ShowPropertiesGroup()
 {
 	obs_property_set_visible(filterPropertiesGroup, true);
 }
 
-const char *SimpleGaussianFilter::GetShaderFilePath()
+const char *TestFilter::GetShaderFilePath()
 {
 	const char *path = obs_module_file(shaderFileName);
 	return path;
