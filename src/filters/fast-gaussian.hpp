@@ -5,11 +5,7 @@
 #include <plugin-support.h>
 #include <obs-module.h>
 #include <string>
-#if defined(__linux__)
-  #include <memory>
-#elif _WIN32
-  #include <memory>
-#endif
+#include <memory>
 
 #define SETTING_FAST_GAUSSIAN_DIRECTIONS "fast_gaussian_blur_directions"
 #define SETTING_FAST_GAUSSIAN_QUALITY "fast_gaussian_blur_quality"

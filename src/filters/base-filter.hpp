@@ -3,12 +3,7 @@
 
 #include <obs.h>
 #include <string>
-
-#if defined(__linux__)
-  #include <memory>
-#elif _WIN32
-  #include <memory>
-#endif
+#include <memory>
 
 class BaseFilter {
 
