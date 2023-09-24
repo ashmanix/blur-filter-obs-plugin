@@ -54,3 +54,4 @@ public:
 };
 
 #endif // BLURFILTERSOURCE_H
+
