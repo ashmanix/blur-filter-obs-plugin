@@ -27,6 +27,7 @@ const char *BlurFilterSource::GetName(void *unused)
 void BlurFilterSource::ChangeFilterSelection(struct filter_data *filterData,
 					     obs_data_t *settings)
 {
+	UNUSED_PARAMETER(settings);
 	long long filterIndex = filterData->selectedFilterIndex;
 
 	obs_enter_graphics();
@@ -46,7 +47,6 @@ void BlurFilterSource::ChangeFilterSelection(struct filter_data *filterData,
 	}
 
 	filterData->filterArray[filterIndex]->SetParameters(filterData->effect);
-	filterData->filterArray[filterIndex]->UpdateFilter(settings);
 	TogglePropertyGroupVisibility(filterData);
 }
 
@@ -63,7 +63,11 @@ void *BlurFilterSource::CreateSource(obs_data_t *settings, obs_source_t *source)
 		std::unique_ptr<BaseFilter>(new FastGaussianFilter()));
 
 	filterData->context = source;
+	filterData->selectedFilterIndex = 0;
 
+	filterData->filterArray[filterData->selectedFilterIndex]->UpdateFilter(settings);
+
+	ChangeFilterSelection(filterData, settings);
 	SetDefaultProperties(filterData, settings);
 
 	obs_source_update(source, settings);
@@ -84,13 +88,14 @@ void BlurFilterSource::DestroySource(void *data)
 
 void BlurFilterSource::UpdateSource(void *data, obs_data_t *settings)
 {
+	// obs_log(LOG_INFO, "Updating Source!");
 	struct filter_data *filterData = (struct filter_data *)data;
 	long long blurTypeIndex = obs_data_get_int(settings, SETTING_BLUR_TYPE);
 	if (filterData && (filterData->selectedFilterIndex != blurTypeIndex)) {
 		filterData->selectedFilterIndex = blurTypeIndex;
 		ChangeFilterSelection(filterData, settings);
-		filterData->filterArray[blurTypeIndex]->UpdateFilter(settings);
-	}
+	} 
+	filterData->filterArray[blurTypeIndex]->UpdateFilter(settings);
 }
 
 bool BlurFilterSource::FilterSelectionChangeCallback(void *data,
