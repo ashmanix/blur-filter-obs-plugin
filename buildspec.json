@@ -41,7 +41,7 @@
     },
     "platformConfig": {
         "macos": {
-            "bundleId": "com.ashmanix.blur-filter-obs-plugin"
+            "bundleId": "com.ashmanix.blur-filter-obs-plugin-0.0.3"
         }
     },
     "name": "blur-filter-obs-plugin",
