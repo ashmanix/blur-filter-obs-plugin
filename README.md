@@ -18,8 +18,8 @@ To use this plugin:
 - Right click on an image or video source and select `Filters`
 - On the popup window that appears select the `+` button to add a new filter
 - Select the filter called `Ashmanix Blur Filter`
-- Use the slider labelled `Blur Size` to set the level of blur.
-- Use the dropdown to select between blur filter types.
+- Use the dropdown to select between blur filter types
+- Each filter will have its own properties you can set
 
 ## Build Instructions
 To build this code use the included scripts that are taken from the [OBS Plugin Template](https://github.com/obsproject/obs-plugintemplate).

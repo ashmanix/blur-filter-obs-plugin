@@ -1,0 +1,60 @@
+uniform float4x4 ViewProj;
+// This is a fast guassian blur shader taken from https://www.shadertoy.com/view/Xltfzj
+// and modified to work in OBS It was created by existical and is based on a shader published 
+// here:  https://xorshaders.weebly.com/tutorials/blur-shaders-5-part-2
+
+uniform texture2d image;
+uniform float targetWidth;
+uniform float targetHeight;
+uniform float blurSize; // BLUR SIZE (Radius)
+uniform float blurQuality; // BLUR QUALITY (Default 4.0 - More is better but slower)
+uniform float blurDirections; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
+uniform float sigma = 30.0;
+
+sampler_state clampSampler {
+    Filter = LINEAR;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+struct VertData {
+    float4 pos : POSITION;
+    float2 uv  : TEXCOORD0;
+};
+
+VertData VSDefault(VertData v_in) {
+    VertData vert_out;
+    vert_out.pos = mul(float4(v_in.pos.xyz, 1.0), ViewProj);
+    vert_out.uv  = v_in.uv;
+    return vert_out;
+}
+
+float4 PShader(VertData v_in) : TARGET
+{
+    float pi = 6.28318530718; // Pi*2
+
+    float2 resolution = float2(targetWidth, targetHeight);
+    float2 uv = v_in.uv;
+    float2 radius = blurSize/resolution;
+
+    float4 color = image.Sample(clampSampler, uv);
+
+    // Blur calculations
+    for( float d=0.0; d<pi; d+=pi/blurDirections)
+    {
+		for(float i=1.0/blurQuality; i<=1.0; i+=1.0/blurQuality)
+        {
+			color += image.Sample(clampSampler, uv+float2(cos(d),sin(d))*radius*i);		
+        }
+    }
+
+    color /= blurQuality * blurDirections - 1;
+    return color;
+}
+
+technique Draw {
+    pass {
+        vertex_shader = VSDefault(v_in);
+        pixel_shader  = PShader(v_in);
+    }
+}
