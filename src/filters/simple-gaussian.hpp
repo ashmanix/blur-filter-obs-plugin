@@ -5,6 +5,7 @@
 #include <plugin-support.h>
 #include <obs-module.h>
 #include <string>
+#include <memory>
 
 #define SETTING_SIMPLE_GAUSSIAN_SIZE "simple_gaussian_blur_size"
 

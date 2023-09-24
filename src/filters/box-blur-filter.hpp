@@ -5,6 +5,7 @@
 #include <plugin-support.h>
 #include <obs-module.h>
 #include <string>
+#include <memory>
 
 #define SETTING_BOX_FILTER_SIZE "box_filter_blur_size"
 

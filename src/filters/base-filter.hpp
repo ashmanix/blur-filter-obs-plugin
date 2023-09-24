@@ -3,6 +3,7 @@
 
 #include <obs.h>
 #include <string>
+#include <memory>
 
 class BaseFilter {
 

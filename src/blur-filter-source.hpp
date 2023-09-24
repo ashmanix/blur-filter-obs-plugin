@@ -5,6 +5,7 @@
 #include <plugin-support.h>
 #include <string>
 #include <vector>
+#include <memory>
 #include "src/filters/base-filter.hpp"
 #include "src/filters/simple-gaussian.hpp"
 #include "src/filters/box-blur-filter.hpp"
