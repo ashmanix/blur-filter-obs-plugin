@@ -1,11 +1,16 @@
 #ifndef BLURFILTERSOURCE_H
 #define BLURFILTERSOURCE_H
 
+#if defined(__linux__)
+  #include <memory>
+#elif _WIN32
+  #include <memory>
+#endif
+
 #include <obs-module.h>
 #include <plugin-support.h>
 #include <string>
 #include <vector>
-#include <memory>
 #include "src/filters/base-filter.hpp"
 #include "src/filters/simple-gaussian.hpp"
 #include "src/filters/box-blur-filter.hpp"
