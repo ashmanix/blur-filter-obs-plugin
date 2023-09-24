@@ -1,7 +1,6 @@
 #include "box-blur-filter.hpp"
 
-BoxBlurFilter::BoxBlurFilter()
-{}
+BoxBlurFilter::BoxBlurFilter() {}
 
 BoxBlurFilter::~BoxBlurFilter() {}
 
@@ -20,7 +19,7 @@ void BoxBlurFilter::UpdateFilter(obs_data_t *settings)
 }
 
 void BoxBlurFilter::SetProperties(obs_properties_t *mainProperties,
-					 std::string name)
+				  std::string name)
 {
 	filterProperties = obs_properties_create();
 
@@ -31,13 +30,13 @@ void BoxBlurFilter::SetProperties(obs_properties_t *mainProperties,
 
 	filterPropertiesGroup = obs_properties_add_group(
 		mainProperties, name.c_str(),
-		obs_module_text("FilterOptionsGroupTitle"), OBS_GROUP_NORMAL, filterProperties);
+		obs_module_text("FilterOptionsGroupTitle"), OBS_GROUP_NORMAL,
+		filterProperties);
 }
 
 void BoxBlurFilter::SetPropertyDefaults(obs_data_t *settings)
 {
-	obs_data_set_default_double(settings, SETTING_BOX_FILTER_SIZE,
-				    1.0);
+	obs_data_set_default_double(settings, SETTING_BOX_FILTER_SIZE, 1.0);
 }
 
 void BoxBlurFilter::Render(obs_source_t *context)

@@ -1,7 +1,6 @@
 #include "simple-gaussian.hpp"
 
-SimpleGaussianFilter::SimpleGaussianFilter()
-{}
+SimpleGaussianFilter::SimpleGaussianFilter() {}
 
 SimpleGaussianFilter::~SimpleGaussianFilter() {}
 
@@ -31,7 +30,8 @@ void SimpleGaussianFilter::SetProperties(obs_properties_t *mainProperties,
 
 	filterPropertiesGroup = obs_properties_add_group(
 		mainProperties, name.c_str(),
-		obs_module_text("FilterOptionsGroupTitle"), OBS_GROUP_NORMAL, filterProperties);
+		obs_module_text("FilterOptionsGroupTitle"), OBS_GROUP_NORMAL,
+		filterProperties);
 }
 
 void SimpleGaussianFilter::SetPropertyDefaults(obs_data_t *settings)

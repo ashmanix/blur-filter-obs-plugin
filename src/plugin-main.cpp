@@ -29,7 +29,7 @@ bool obs_module_load(void)
 	auto blurFilterSource = new BlurFilterSource();
 	blurFilterSource->RegisterSource();
 	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
-	     PLUGIN_VERSION);
+		PLUGIN_VERSION);
 	return true;
 }
 

@@ -65,7 +65,8 @@ void *BlurFilterSource::CreateSource(obs_data_t *settings, obs_source_t *source)
 	filterData->context = source;
 	filterData->selectedFilterIndex = 0;
 
-	filterData->filterArray[filterData->selectedFilterIndex]->UpdateFilter(settings);
+	filterData->filterArray[filterData->selectedFilterIndex]->UpdateFilter(
+		settings);
 
 	ChangeFilterSelection(filterData, settings);
 	SetDefaultProperties(filterData, settings);
@@ -94,7 +95,7 @@ void BlurFilterSource::UpdateSource(void *data, obs_data_t *settings)
 	if (filterData && (filterData->selectedFilterIndex != blurTypeIndex)) {
 		filterData->selectedFilterIndex = blurTypeIndex;
 		ChangeFilterSelection(filterData, settings);
-	} 
+	}
 	filterData->filterArray[blurTypeIndex]->UpdateFilter(settings);
 }
 

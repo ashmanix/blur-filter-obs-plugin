@@ -35,15 +35,13 @@ void FastGaussianFilter::SetProperties(obs_properties_t *mainProperties,
 {
 	filterProperties = obs_properties_create();
 
-	obs_properties_add_float_slider(filterProperties,
-					SETTING_FAST_GAUSSIAN_DIRECTIONS,
-					obs_module_text("BlurDirectionsSelectTitle"),
-					1.0, 20.0, 0.1);
+	obs_properties_add_float_slider(
+		filterProperties, SETTING_FAST_GAUSSIAN_DIRECTIONS,
+		obs_module_text("BlurDirectionsSelectTitle"), 1.0, 20.0, 0.1);
 
-	obs_properties_add_float_slider(filterProperties,
-					SETTING_FAST_GAUSSIAN_QUALITY,
-					obs_module_text("BlurQualitySelectTitle"),
-					1.0, 5.0, 0.1);
+	obs_properties_add_float_slider(
+		filterProperties, SETTING_FAST_GAUSSIAN_QUALITY,
+		obs_module_text("BlurQualitySelectTitle"), 1.0, 5.0, 0.1);
 
 	obs_properties_add_float_slider(filterProperties,
 					SETTING_FAST_GAUSSIAN_SIZE,
@@ -58,8 +56,10 @@ void FastGaussianFilter::SetProperties(obs_properties_t *mainProperties,
 
 void FastGaussianFilter::SetPropertyDefaults(obs_data_t *settings)
 {
-	obs_data_set_default_double(settings, SETTING_FAST_GAUSSIAN_DIRECTIONS, 10.0);
-	obs_data_set_default_double(settings, SETTING_FAST_GAUSSIAN_QUALITY, 3.0);
+	obs_data_set_default_double(settings, SETTING_FAST_GAUSSIAN_DIRECTIONS,
+				    10.0);
+	obs_data_set_default_double(settings, SETTING_FAST_GAUSSIAN_QUALITY,
+				    3.0);
 	obs_data_set_default_double(settings, SETTING_FAST_GAUSSIAN_SIZE, 20.0);
 }
 

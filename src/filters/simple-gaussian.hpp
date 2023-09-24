@@ -19,7 +19,8 @@ private:
 	obs_property_t *filterPropertiesGroup;
 
 	char const *shaderFileName = "simple_gaussian_blur.effect";
-	char const *filterName = obs_module_text("BlurTypeSelectOptionSimpleGaussian");
+	char const *filterName =
+		obs_module_text("BlurTypeSelectOptionSimpleGaussian");
 
 public:
 	SimpleGaussianFilter();
