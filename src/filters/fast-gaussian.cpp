@@ -77,12 +77,12 @@ void FastGaussianFilter::Render(obs_source_t *context)
 
 void FastGaussianFilter::HidePropertiesGroup()
 {
-	obs_property_set_visible(filterPropertiesGroup, false);
+	if (filterPropertiesGroup) obs_property_set_visible(filterPropertiesGroup, false);
 }
 
 void FastGaussianFilter::ShowPropertiesGroup()
 {
-	obs_property_set_visible(filterPropertiesGroup, true);
+	if (filterPropertiesGroup) obs_property_set_visible(filterPropertiesGroup, true);
 }
 
 const char *FastGaussianFilter::GetShaderFilePath()
