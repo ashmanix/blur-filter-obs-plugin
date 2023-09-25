@@ -152,9 +152,8 @@ obs_properties_t *BlurFilterSource::GetProperties(void *data)
 			filterData->filterArray[i]->SetProperties(
 				filterData->mainProperties,
 				filterStringName.append(std::to_string(i)));
-
-			TogglePropertyGroupVisibility(filterData);
 		}
+		TogglePropertyGroupVisibility(filterData);
 		return filterData->mainProperties;
 	}
 
