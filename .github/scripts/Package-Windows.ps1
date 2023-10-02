@@ -79,8 +79,9 @@ function Package {
         Invoke-External iscc ${IsccFile} /O"${ProjectRoot}/release" /F"${OutputName}-Installer"
         Remove-Item -Path Package -Recurse
         Pop-Location -Stack BuildTemp
-    } else {
-        Log-Group "Archiving ${ProductName}..."
+    } 
+    # else {
+        # Log-Group "Archiving ${ProductName}..."
         $CompressArgs = @{
             Path = (Get-ChildItem -Path "${ProjectRoot}/release/${Configuration}" -Exclude "${OutputName}*.*")
             CompressionLevel = 'Optimal'
@@ -89,7 +90,7 @@ function Package {
         }
 
         Compress-Archive -Force @CompressArgs
-    }
+    # }
     Log-Group
 }
 
