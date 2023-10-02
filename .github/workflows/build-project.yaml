@@ -256,11 +256,11 @@ jobs:
           config: ${{ needs.check-event.outputs.config }}
           package: ${{ fromJSON(needs.check-event.outputs.package) }}
 
-      - name: Upload Build Artifact 📡
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64-files-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/release/${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64*.zip
+      # - name: Upload Build Artifact 📡
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64-files-${{ needs.check-event.outputs.commitHash }}
+      #     path: ${{ github.workspace }}/release/${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64*.zip
 
       - name: Upload Installer Artifacts 📡
         uses: actions/upload-artifact@v3
