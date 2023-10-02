@@ -81,7 +81,7 @@ function Package {
         Pop-Location -Stack BuildTemp
     } 
     # else {
-        # Log-Group "Archiving ${ProductName}..."
+        Log-Information "Archiving ${ProductName} to destination: ${ProjectRoot}/release/${OutputName}.zip"
         $CompressArgs = @{
             Path = (Get-ChildItem -Path "${ProjectRoot}/release/${Configuration}" -Exclude "${OutputName}*.*")
             CompressionLevel = 'Optimal'
