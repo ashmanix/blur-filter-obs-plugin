@@ -254,7 +254,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64-files-plugin-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/release/RelWithDebInfo/${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64*.*
+          path: ${{ github.workspace }}/release/RelWithDebInfo/*.*
 
 
       - name: Package Plugin 📀
