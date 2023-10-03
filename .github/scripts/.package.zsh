@@ -239,10 +239,6 @@ ${_usage_host:-}"
       log_group "Archiving ${product_name} Debug Symbols..."
       pushd ${project_root}/release/${config}
       XZ_OPT=-T0 tar "-${_tarflags}" ${project_root}/release/${output_name}-dSYMs.tar.xz ${product_name}.plugin.dSYM
-
-      log_group "Archiving ${product_name}..."
-      XZ_OPT=-T0 tar "-${_tarflags}" ${project_root}/release/${output_name}.tar.xz ${product_name}.plugin
-      popd
     }
 
     log_group
