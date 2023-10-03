@@ -122,7 +122,6 @@ jobs:
 
       - name: Upload Build Artifacts 📡
         uses: actions/upload-artifact@v3
-        if: ${{ needs.check-event.outputs.config == 'Release' }}
         with:
           name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-macos-universal-plugin-${{ needs.check-event.outputs.commitHash }}
           path: ${{ github.workspace }}/release/RelWithDebInfo/
