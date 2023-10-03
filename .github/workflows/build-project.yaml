@@ -250,7 +250,7 @@ jobs:
           config: ${{ needs.check-event.outputs.config }}
 
       - name: Upload Build Artifact 📡
-        if: ${{ startsWith(github.ref, 'refs/tags/') && github.event_name != 'pull_request' }}
+        # if: ${{ startsWith(github.ref, 'refs/tags/') && github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64-files-plugin-${{ needs.check-event.outputs.commitHash }}

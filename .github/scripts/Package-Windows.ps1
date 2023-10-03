@@ -80,7 +80,7 @@ function Package {
         Remove-Item -Path Package -Recurse
         Pop-Location -Stack BuildTemp
     } 
-    # else {
+    else {
         Log-Information "Archiving ${ProductName} to destination: ${ProjectRoot}/release/${OutputName}.zip"
         $CompressArgs = @{
             Path = (Get-ChildItem -Path "${ProjectRoot}/release/${Configuration}" -Exclude "${OutputName}*.*")
@@ -90,7 +90,7 @@ function Package {
         }
 
         Compress-Archive -Force @CompressArgs
-    # }
+    }
     Log-Group
 }
 
