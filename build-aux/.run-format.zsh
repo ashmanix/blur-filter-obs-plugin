@@ -51,7 +51,7 @@ invoke_formatter() {
 
       if ! is-at-least ${formatter_version[-1]} 17.0.3; then
         log_error "clang-format is more recent than version 17.0.3 (found ${formatter_version[-1]})."
-        # exit 2
+        exit 2
       fi
 
       if (( ! #source_files )) source_files=(src/**/*.(c|cpp|h|hpp|m|mm)(.N))

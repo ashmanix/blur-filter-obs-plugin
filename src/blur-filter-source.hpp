@@ -36,14 +36,10 @@ private:
 	static void DestroySource(void *data);
 	static void UpdateSource(void *data, obs_data_t *settings);
 	static obs_properties_t *GetProperties(void *data);
-	static void SetDefaultProperties(filter_data *filterData,
-					 obs_data_t *settings);
+	static void SetDefaultProperties(filter_data *filterData, obs_data_t *settings);
 	static void RenderSource(void *data, gs_effect_t *effect);
-	static void ChangeFilterSelection(struct filter_data *filter,
-					  obs_data_t *settings);
-	static bool FilterSelectionChangeCallback(void *data,
-						  obs_properties_t *props,
-						  obs_property_t *list,
+	static void ChangeFilterSelection(struct filter_data *filter, obs_data_t *settings);
+	static bool FilterSelectionChangeCallback(void *data, obs_properties_t *props, obs_property_t *list,
 						  obs_data_t *settings);
 	static void TogglePropertyGroupVisibility(filter_data *data);
 
@@ -54,4 +50,3 @@ public:
 };
 
 #endif // BLURFILTERSOURCE_H
-
