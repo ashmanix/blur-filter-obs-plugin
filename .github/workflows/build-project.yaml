@@ -142,13 +142,6 @@ jobs:
           codesign: ${{ fromJSON(needs.check-event.outputs.codesign) }}
           codesignIdent: ${{ steps.codesign.outputs.codesignIdent }}
 
-      - name: Upload Build Artifacts 📡
-        uses: actions/upload-artifact@v3
-        if: ${{ needs.check-event.outputs.config == 'Release' }}
-        with:
-          name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-macos-universal-files-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/release/RelWithDebInfo/
-
       - name: Package Plugin 📀
         uses: ./.github/actions/package-plugin
         with:
@@ -159,7 +152,7 @@ jobs:
           codesignIdent: ${{ steps.codesign.outputs.codesignIdent }}
           installerIdent: ${{ steps.codesign.outputs.installerIdent }}
           codesignTeam: ${{ steps.codesign.outputs.codesignTeam }}
-          notarize: ${{ needs.check-event.outputs.notarize && fromJSON(needs.check-event.outputs.notarize) && steps.codesign.outputs.haveNotarizationUser && fromJSON(steps.codesign.outputs.haveNotarizationUser) }}
+          notarize: ${{ fromJSON(needs.check-event.outputs.notarize) && fromJSON(steps.codesign.outputs.haveNotarizationUser) }}
           codesignUser: ${{ secrets.MACOS_NOTARIZATION_USERNAME }}
           codesignPass: ${{ secrets.MACOS_NOTARIZATION_PASSWORD }}
 
@@ -289,13 +282,6 @@ jobs:
         with:
           target: x64
           config: ${{ needs.check-event.outputs.config }}
-
-      - name: Upload Build Artifact 📡
-        uses: actions/upload-artifact@v3
-        with:
-          if: ${{ needs.check-event.outputs.config == 'Release' }}
-          name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-windows-x64-files-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/release/RelWithDebInfo/
 
       - name: Package Plugin 📀
         uses: ./.github/actions/package-plugin
