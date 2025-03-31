@@ -1,42 +1,34 @@
 {
     "dependencies": {
         "obs-studio": {
-            "version": "29.1.2",
+            "version": "31.0.0",
             "baseUrl": "https://github.com/obsproject/obs-studio/archive/refs/tags",
             "label": "OBS sources",
             "hashes": {
-                "macos": "215f1fa5772c5dd9f3d6e35b0cb573912b00320149666a77864f9d305525504b",
-                "windows-x64": "46d451f3f42b9d2c59339ec268165849c7b7904cdf1cc2a8d44c015815a9e37d"
+                "macos": "a22966ff07aba38833ba57c36c9e0d190d083be5dec5048d0a60cd9e6b997242",
+                "windows-x64": "e8434dcee06f1702f0a0bbd1489296c77116fc51356835c3af4a6ed21b1e1c74"
             }
         },
         "prebuilt": {
-            "version": "2023-04-12",
+            "version": "2024-09-12",
             "baseUrl": "https://github.com/obsproject/obs-deps/releases/download",
             "label": "Pre-Built obs-deps",
             "hashes": {
-                "macos": "9535c6e1ad96f7d49960251e85a245774088d48da1d602bb82f734b10219125a",
-                "windows-x64": "c13a14a1acc4224b21304d97b63da4121de1ed6981297e50496fbc474abc0503"
+                "macos": "c857b211ee378772994b632036e1e5befe66b37e85286cb8e3cefc1435d5220a",
+                "windows-x64": "d4a4f194591766891ad3c0b267deec3c4b85239c8fe557273559927456aeedbb"
             }
         },
         "qt6": {
-            "version": "2023-04-12",
+            "version": "2024-09-12",
             "baseUrl": "https://github.com/obsproject/obs-deps/releases/download",
             "label": "Pre-Built Qt6",
             "hashes": {
-                "macos": "eb7614544ab4f3d2c6052c797635602280ca5b028a6b987523d8484222ce45d1",
-                "windows-x64": "4d39364b8a8dee5aa24fcebd8440d5c22bb4551c6b440ffeacce7d61f2ed1add"
+                "macos": "34a2de6b7f4d4d58fc5a15a4dba49a61d81a4045d0cedfc1a1f08c0dfb8047cf",
+                "windows-x64": "4d15ce13dbb0a8a2cabcce5ae0da5e80ee589b482a61b2025378465c1da32c4f"
             },
             "debugSymbols": {
-                "windows-x64": "f34ee5067be19ed370268b15c53684b7b8aaa867dc800b68931df905d679e31f"
+                "windows-x64": "dad2351a5c9cd438168e1ed8fb453a2534532252edb555f1001a5e8eb3f1bbd4"
             }
-        }
-    },
-    "tools": {
-        "packages": {
-            "version": "1.2.10",
-            "baseUrl": "https://web.archive.org/web/20230727054218/http://s.sudre.free.fr/Software/files",
-            "label": "Packages.app",
-            "hash": "6afdd25386295974dad8f078b8f1e41cabebd08e72d970bf92f707c7e48b16c9"
         }
     },
     "platformConfig": {
@@ -45,13 +37,9 @@
         }
     },
     "name": "blur-filter-obs-plugin",
-    "version": "1.0.1",
+    "displayName": "Ashmanix OBS blur filter",
+    "version": "1.1.0",
     "author": "Ashmanix",
     "website": "https://www.ashmanix.com",
-    "email": "email@ashmanix.com",
-    "uuids": {
-        "macosPackage": "00000000-0000-0000-0000-000000000000",
-        "macosInstaller": "00000000-0000-0000-0000-000000000000",
-        "windowsApp": "00000000-0000-0000-0000-000000000000"
-    }
+    "email": "email@ashmanix.com"
 }

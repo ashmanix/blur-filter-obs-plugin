@@ -7,7 +7,6 @@
 #include <string>
 #include <memory>
 
-
 #define SETTING_SIMPLE_GAUSSIAN_SIZE "simple_gaussian_blur_size"
 
 class SimpleGaussianFilter : public BaseFilter {
@@ -21,8 +20,7 @@ private:
 	obs_property_t *filterPropertiesGroup = nullptr;
 
 	char const *shaderFileName = "simple_gaussian_blur.effect";
-	char const *filterName =
-		obs_module_text("BlurTypeSelectOptionSimpleGaussian");
+	char const *filterName = obs_module_text("BlurTypeSelectOptionSimpleGaussian");
 
 public:
 	SimpleGaussianFilter();
