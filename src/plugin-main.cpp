@@ -1,6 +1,6 @@
 /*
 Blur filter plugin
-Copyright (C) 2023 Ashmanix email@ashmanix.com
+Copyright (C) 2025 Ashmanix email@ashmanix.com
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,8 +28,7 @@ bool obs_module_load(void)
 {
 	auto blurFilterSource = new BlurFilterSource();
 	blurFilterSource->RegisterSource();
-	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
-		PLUGIN_VERSION);
+	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 	return true;
 }
 
