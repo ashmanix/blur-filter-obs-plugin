@@ -51,12 +51,12 @@ void SimpleGaussianFilter::Render(obs_source_t *context)
 
 void SimpleGaussianFilter::HidePropertiesGroup()
 {
-	obs_property_set_visible(filterPropertiesGroup, false);
+	if (filterPropertiesGroup) obs_property_set_visible(filterPropertiesGroup, false);
 }
 
 void SimpleGaussianFilter::ShowPropertiesGroup()
 {
-	obs_property_set_visible(filterPropertiesGroup, true);
+	if(filterPropertiesGroup) obs_property_set_visible(filterPropertiesGroup, true);
 }
 
 const char *SimpleGaussianFilter::GetShaderFilePath()

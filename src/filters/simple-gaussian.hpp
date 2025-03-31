@@ -7,17 +7,18 @@
 #include <string>
 #include <memory>
 
+
 #define SETTING_SIMPLE_GAUSSIAN_SIZE "simple_gaussian_blur_size"
 
 class SimpleGaussianFilter : public BaseFilter {
 private:
-	gs_eparam_t *blurSizeParam;
-	gs_eparam_t *targetWidthParam;
-	gs_eparam_t *targetHeightParam;
+	gs_eparam_t *blurSizeParam = nullptr;
+	gs_eparam_t *targetWidthParam = nullptr;
+	gs_eparam_t *targetHeightParam = nullptr;
 
 	float blurSize;
-	obs_properties_t *filterProperties;
-	obs_property_t *filterPropertiesGroup;
+	obs_properties_t *filterProperties = nullptr;
+	obs_property_t *filterPropertiesGroup = nullptr;
 
 	char const *shaderFileName = "simple_gaussian_blur.effect";
 	char const *filterName =

@@ -13,17 +13,17 @@
 
 class FastGaussianFilter : public BaseFilter {
 private:
-	gs_eparam_t *blurDirectionsParam;
-	gs_eparam_t *blurQualityParam;
-	gs_eparam_t *blurSizeParam;
-	gs_eparam_t *targetWidthParam;
-	gs_eparam_t *targetHeightParam;
+	gs_eparam_t *blurDirectionsParam = nullptr;
+	gs_eparam_t *blurQualityParam = nullptr;
+	gs_eparam_t *blurSizeParam = nullptr;
+	gs_eparam_t *targetWidthParam = nullptr;
+	gs_eparam_t *targetHeightParam = nullptr;
 
 	float blurDirections;
 	float blurQuality;
 	float blurSize;
-	obs_properties_t *filterProperties;
-	obs_property_t *filterPropertiesGroup;
+	obs_properties_t *filterProperties = nullptr;
+	obs_property_t *filterPropertiesGroup = nullptr;
 
 	char const *shaderFileName = "fast_gaussian_blur.effect";
 	char const *filterName =

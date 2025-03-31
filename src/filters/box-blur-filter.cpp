@@ -50,12 +50,12 @@ void BoxBlurFilter::Render(obs_source_t *context)
 
 void BoxBlurFilter::HidePropertiesGroup()
 {
-	obs_property_set_visible(filterPropertiesGroup, false);
+	if(filterPropertiesGroup) obs_property_set_visible(filterPropertiesGroup, false);
 }
 
 void BoxBlurFilter::ShowPropertiesGroup()
 {
-	obs_property_set_visible(filterPropertiesGroup, true);
+	if(filterPropertiesGroup) obs_property_set_visible(filterPropertiesGroup, true);
 }
 
 const char *BoxBlurFilter::GetShaderFilePath()

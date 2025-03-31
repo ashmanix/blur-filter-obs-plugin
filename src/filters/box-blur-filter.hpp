@@ -11,13 +11,13 @@
 
 class BoxBlurFilter : public BaseFilter {
 private:
-	gs_eparam_t *blurSizeParam;
-	gs_eparam_t *targetWidthParam;
-	gs_eparam_t *targetHeightParam;
+	gs_eparam_t *blurSizeParam = nullptr;
+	gs_eparam_t *targetWidthParam = nullptr;
+	gs_eparam_t *targetHeightParam = nullptr;
 
 	float blurSize;
 	obs_properties_t *filterProperties;
-	obs_property_t *filterPropertiesGroup;
+	obs_property_t *filterPropertiesGroup = nullptr;
 
 	char const *shaderFileName = "box_blur.effect";
 	char const *filterName = obs_module_text("BlurTypeSelectOptionBox");

@@ -9,7 +9,7 @@ class BaseFilter {
 
 private:
 	char *shaderFileName;
-	obs_property_t *filterPropertiesGroup;
+	obs_property_t *filterPropertiesGroup = nullptr;
 
 public:
 	virtual void SetParameters(gs_effect_t *effect)
