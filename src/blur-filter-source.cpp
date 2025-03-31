@@ -27,7 +27,7 @@ const char *BlurFilterSource::GetName(void *unused)
 void BlurFilterSource::ChangeFilterSelection(struct filter_data *filterData, obs_data_t *settings)
 {
 	UNUSED_PARAMETER(settings);
-	long long filterIndex = filterData->selectedFilterIndex;
+	int filterIndex = (int)filterData->selectedFilterIndex;
 
 	obs_enter_graphics();
 
@@ -83,7 +83,7 @@ void BlurFilterSource::UpdateSource(void *data, obs_data_t *settings)
 {
 	// obs_log(LOG_INFO, "Updating Source!");
 	struct filter_data *filterData = (struct filter_data *)data;
-	long long blurTypeIndex = obs_data_get_int(settings, SETTING_BLUR_TYPE);
+	int blurTypeIndex = (int)obs_data_get_int(settings, SETTING_BLUR_TYPE);
 	if (filterData && (filterData->selectedFilterIndex != blurTypeIndex)) {
 		filterData->selectedFilterIndex = blurTypeIndex;
 		ChangeFilterSelection(filterData, settings);
@@ -95,7 +95,7 @@ bool BlurFilterSource::FilterSelectionChangeCallback(void *data, obs_properties_
 						     obs_data_t *settings)
 {
 	UNUSED_PARAMETER(props);
-	long long selectedFilterIndex = obs_data_get_int(settings, SETTING_BLUR_TYPE);
+	int selectedFilterIndex = (int)obs_data_get_int(settings, SETTING_BLUR_TYPE);
 
 	struct filter_data *filterData = (struct filter_data *)data;
 
@@ -151,7 +151,7 @@ void BlurFilterSource::SetDefaultProperties(filter_data *filterData, obs_data_t 
 void BlurFilterSource::RenderSource(void *data, gs_effect_t *effect)
 {
 	struct filter_data *filterData = (struct filter_data *)data;
-	long long filterIndex = filterData->selectedFilterIndex;
+	int filterIndex = filterData->selectedFilterIndex;
 	obs_source_t *context = filterData->context;
 
 	if (!obs_source_process_filter_begin(filterData->context, GS_RGBA, OBS_ALLOW_DIRECT_RENDERING))
