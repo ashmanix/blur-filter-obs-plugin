@@ -21,7 +21,7 @@ private:
 		gs_effect_t *effect;
 
 		char *selectedFileName;
-		long long selectedFilterIndex;
+		int selectedFilterIndex;
 		std::vector<std::unique_ptr<BaseFilter>> filterArray;
 
 		obs_properties_t *mainProperties;
