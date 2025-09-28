@@ -10,14 +10,14 @@
       "name": "template",
       "hidden": true,
       "cacheVariables": {
-        "ENABLE_FRONTEND_API": true,
-        "ENABLE_QT": true
+        "ENABLE_FRONTEND_API": false,
+        "ENABLE_QT": false
       }
     },
     {
       "name": "macos",
       "displayName": "macOS Universal",
-      "description": "Build for macOS 11.0+ (Universal binary)",
+      "description": "Build for macOS 12.0+ (Universal binary)",
       "inherits": [
         "template"
       ],
@@ -33,7 +33,7 @@
         "deprecated": true
       },
       "cacheVariables": {
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
         "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64",
         "CODESIGN_IDENTITY": "$penv{CODESIGN_IDENT}",
         "CODESIGN_TEAM": "$penv{CODESIGN_TEAM}"
@@ -45,7 +45,7 @@
         "macos"
       ],
       "displayName": "macOS Universal CI build",
-      "description": "Build for macOS 11.0+ (Universal binary) for CI",
+      "description": "Build for macOS 12.0+ (Universal binary) for CI",
       "generator": "Xcode",
       "cacheVariables": {
         "CMAKE_COMPILE_WARNING_AS_ERROR": true,

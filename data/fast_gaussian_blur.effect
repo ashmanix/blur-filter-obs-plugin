@@ -38,17 +38,20 @@ float4 PShader(VertData v_in) : TARGET
     float2 radius = blurSize/resolution;
 
     float4 color = image.Sample(clampSampler, uv);
+    float count = 1.0;
 
     // Blur calculations
     for( float d=0.0; d<pi; d+=pi/blurDirections)
     {
 		for(float i=1.0/blurQuality; i<=1.0; i+=1.0/blurQuality)
         {
-			color += image.Sample(clampSampler, uv+float2(cos(d),sin(d))*radius*i);		
+			color += image.Sample(clampSampler, uv+float2(cos(d),sin(d))*radius*i);
+            count += 1.0;		
         }
     }
 
-    color /= blurQuality * blurDirections - 1;
+    // color /= blurQuality * blurDirections - 1;
+    color /= count;
     return color;
 }
 
