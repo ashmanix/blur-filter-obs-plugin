@@ -18,6 +18,16 @@ void BlurFilterSource::RegisterSource()
 	obs_register_source(&source_info);
 }
 
+bool BlurFilterSource::CheckIsMetalRenderer()
+{
+	obs_enter_graphics();
+	const char *device_name = gs_get_device_name();
+	obs_leave_graphics();
+	obs_log(LOG_INFO, "Graphics device name: '%s'", device_name);
+
+	return device_name && std::strcmp(device_name, "Metal") == 0;
+};
+
 const char *BlurFilterSource::GetName(void *unused)
 {
 	UNUSED_PARAMETER(unused);
@@ -51,9 +61,12 @@ void *BlurFilterSource::CreateSource(obs_data_t *settings, obs_source_t *source)
 {
 	struct filter_data *filterData = (struct filter_data *)bzalloc(sizeof(struct filter_data));
 
+	filterData->usingMetalRenderer = CheckIsMetalRenderer();
+
 	filterData->filterArray.push_back(std::unique_ptr<BaseFilter>(new SimpleGaussianFilter()));
 	filterData->filterArray.push_back(std::unique_ptr<BaseFilter>(new BoxBlurFilter()));
-	filterData->filterArray.push_back(std::unique_ptr<BaseFilter>(new FastGaussianFilter()));
+	filterData->filterArray.push_back(
+		std::unique_ptr<BaseFilter>(new FastGaussianFilter(filterData->usingMetalRenderer)));
 
 	filterData->context = source;
 	filterData->selectedFilterIndex = 0;

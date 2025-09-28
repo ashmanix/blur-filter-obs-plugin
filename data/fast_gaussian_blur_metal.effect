@@ -1,0 +1,77 @@
+uniform float4x4 ViewProj;
+
+uniform texture2d image;
+uniform float targetWidth;
+uniform float targetHeight;
+uniform float blurSize; // BLUR SIZE (Radius)
+uniform float blurQuality; // BLUR QUALITY (Default 4.0 - More is better but slower)
+uniform float blurDirections; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
+uniform float sigma = 30.0;
+
+sampler_state clampSampler {
+    Filter = LINEAR;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+struct VertData {
+    float4 pos : POSITION;
+    float2 uv  : TEXCOORD0;
+};
+
+VertData VSDefault(VertData v_in) {
+    VertData vert_out;
+    vert_out.pos = mul(float4(v_in.pos.xyz, 1.0), ViewProj);
+    vert_out.uv  = v_in.uv;
+    return vert_out;
+}
+
+float4 PShader(VertData v_in) : TARGET
+{
+    const int MAX_DIRS  = 16;
+    const int MAX_STEPS = 32;
+
+    float2 uv  = v_in.uv;
+    float2 res = float2(targetWidth, targetHeight);
+
+    // Clamp uniforms without using round()/min()/max() on ints
+    int dirs  = (int)(blurDirections + 0.5);
+    if (dirs < 1) dirs = 1; else if (dirs > MAX_DIRS)  dirs = MAX_DIRS;
+
+    int steps = (int)(blurQuality + 0.5);
+    if (steps < 1) steps = 1; else if (steps > MAX_STEPS) steps = MAX_STEPS;
+
+    // Pixel radius -> UV radius (fixed swizzle issue)
+    float2 radius = (blurSize <= 0.0) ? float2(0.0, 0.0) : (blurSize / res);
+
+    // Start with centre tap
+    float4 accum = image.Sample(clampSampler, uv);
+    float  count = 1.0;
+
+    // Angle sweep, Metal-safe bounds
+    for (int d = 0; d < MAX_DIRS; ++d) {
+        if (d >= dirs) break;
+
+        float a   = 6.28318530718 * (float)d / (float)dirs;
+        float2 dir = float2(cos(a), sin(a));
+
+        for (int k = 1; k <= MAX_STEPS; ++k) {
+            if (k > steps) break;
+
+            float  t    = (float)k / (float)steps; // 0..1 along ray
+            float2 offs = dir * radius * t;
+
+            accum += image.Sample(clampSampler, uv + offs);
+            count += 1.0;
+        }
+    }
+
+    return accum / count; // average including centre
+}
+
+technique Draw {
+    pass {
+        vertex_shader = VSDefault(v_in);
+        pixel_shader  = PShader(v_in);
+    }
+}

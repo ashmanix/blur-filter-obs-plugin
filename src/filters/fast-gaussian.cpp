@@ -1,17 +1,22 @@
 #include "fast-gaussian.hpp"
 
-FastGaussianFilter::FastGaussianFilter() {}
+FastGaussianFilter::FastGaussianFilter(bool isMetalRenderer) : isMetalRenderer(isMetalRenderer) {}
 
 FastGaussianFilter::~FastGaussianFilter() {}
 
 void FastGaussianFilter::SetParameters(gs_effect_t *effect)
 {
 	blurDirectionsParam = gs_effect_get_param_by_name(effect, "blurDirections");
+	REQ(blurDirectionsParam, "blurDirections");
 	blurQualityParam = gs_effect_get_param_by_name(effect, "blurQuality");
+	REQ(blurQualityParam, "blurQuality");
 	blurSizeParam = gs_effect_get_param_by_name(effect, "blurSize");
+	REQ(blurSizeParam, "blurSize");
 
 	targetWidthParam = gs_effect_get_param_by_name(effect, "targetWidth");
+	REQ(targetWidthParam, "targetWidth");
 	targetHeightParam = gs_effect_get_param_by_name(effect, "targetHeight");
+	REQ(targetHeightParam, "targetHeight");
 }
 
 void FastGaussianFilter::UpdateFilter(obs_data_t *settings)
@@ -75,7 +80,12 @@ void FastGaussianFilter::ShowPropertiesGroup()
 
 const char *FastGaussianFilter::GetShaderFilePath()
 {
-	const char *path = obs_module_file(shaderFileName);
+	const char *fileName = shaderFileName;
+
+	if (isMetalRenderer) {
+		fileName = shaderFileNameMetal;
+	}
+	const char *path = obs_module_file(fileName);
 	return path;
 }
 
