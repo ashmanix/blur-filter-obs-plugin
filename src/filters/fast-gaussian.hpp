@@ -45,6 +45,7 @@ public:
 	void ShowPropertiesGroup();
 	const char *GetShaderFilePath();
 	const char *GetFilterName();
+	// Test
 };
 
 #endif // FASTGAUSSIAN_H
