@@ -11,6 +11,8 @@
 #define SETTING_FAST_GAUSSIAN_QUALITY "fast_gaussian_blur_quality"
 #define SETTING_FAST_GAUSSIAN_SIZE "fast_gaussian_blur_size"
 
+#define REQ(p, name) if (!(p)) blog(LOG_WARNING, "[%s] uniform not found: %s", filterName, name);
+
 class FastGaussianFilter : public BaseFilter {
 private:
 	gs_eparam_t *blurDirectionsParam = nullptr;
@@ -26,10 +28,13 @@ private:
 	obs_property_t *filterPropertiesGroup = nullptr;
 
 	char const *shaderFileName = "fast_gaussian_blur.effect";
+	char const *shaderFileNameMetal = "fast_gaussian_blur_metal.effect";
 	char const *filterName = obs_module_text("BlurTypeSelectOptionFastGaussian");
 
+	bool isMetalRenderer = false;
+
 public:
-	FastGaussianFilter();
+	FastGaussianFilter(bool isMetalRenderer);
 	~FastGaussianFilter();
 	void SetParameters(gs_effect_t *effect);
 	void UpdateFilter(obs_data_t *settings);

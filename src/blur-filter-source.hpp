@@ -27,10 +27,12 @@ private:
 		obs_properties_t *mainProperties;
 		obs_properties_t *filterProperties;
 		obs_property_t *filterPropertiesGroup;
+		bool usingMetalRenderer = false;
 	};
 
 	obs_source_info source_info = {};
 
+	static bool CheckIsMetalRenderer();
 	static const char *GetName(void *unused);
 	static void *CreateSource(obs_data_t *settings, obs_source_t *source);
 	static void DestroySource(void *data);
