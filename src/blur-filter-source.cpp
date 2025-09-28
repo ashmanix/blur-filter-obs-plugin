@@ -25,7 +25,7 @@ bool BlurFilterSource::CheckIsMetalRenderer()
 	obs_leave_graphics();
 	obs_log(LOG_INFO, "Graphics device name: '%s'", device_name);
 
-	return device_name && std::strcmp(device_name, "Metal") == 0;
+	return device_name && strcmp(device_name, "Metal") == 0;
 };
 
 const char *BlurFilterSource::GetName(void *unused)
